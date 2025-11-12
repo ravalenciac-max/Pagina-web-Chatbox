@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EntreNos — Apoyo en Trastornos Alimenticios</title>
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#FAFBFC;
+      --accent:#0066CC;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --success:#10B981;
+      --danger:#EF4444;
+      --glass: rgba(255,255,255,0.6);
+      --maxw:1100px;
+      --radius:12px;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#b7ddde 0%, #f6f9ff 100%);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
+
+    header{
+      background:transparent;
+      position:sticky;
+      top:0;
+      z-index:40;
+      backdrop-filter: blur(6px);
+      border-bottom:1px solid rgba(15,23,42,0.04);
+    }
+    .nav{
+      max-width:var(--maxw);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      gap:16px;
+      padding:18px;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo{
+      width:48px;
+      height:48px;
+      border-radius:10px;
+      background:linear-gradient(135deg, #0066CC 0%, #4F8CFF 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:700;
+      font-size:18px;
+      box-shadow: 0 6px 20px rgba(16,24,40,0.06);
+    }
+    nav a{
+      margin-left:14px;
+      color:var(--muted);
+      text-decoration:none;
+      font-weight:600;
+    }
+    .cta{
+      background:var(--accent);
+      color:white;
+      padding:10px 14px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:600;
+      box-shadow: 0 8px 24px rgba(79,140,255,0.12);
+    }
+
+    main{
+      max-width:var(--maxw);
+      margin:28px auto;
+      padding:20px;
+    }
+
+    .hero{
+      display:flex;
+      gap:28px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      padding:28px;
+      background: linear-gradient(180deg, rgba(219, 217, 217, 0.7), rgba(255,255,255,0.6));
+      border-radius:16px;
+      box-shadow: 0 8px 30px rgba(15,23,42,0.04);
+    }
+
+    .hero:hover{
+        background-color: #6b7280;
+    }
+    .hero-left{flex:1 1 420px; min-width:260px}
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:var(--accent);
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    h1{
+      margin:0 0 12px 0;
+      font-size:28px;
+      line-height:1.1;
+    }
+    p.lead{
+      margin:0 0 18px 0;
+      color:var(--muted);
+    }
+    .buttons{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      padding:10px 14px;
+      border-radius:10px;
+      border:1px solid rgba(15,23,42,0.06);
+      background:white;
+      text-decoration:none;
+      color:#0f172a;
+      font-weight:600;
+    }
+    .btn:hover{ 
+        background-color: #bdbdbd;
+    }
+
+    .btn.alt:hover{ 
+        background-color:  #bdbdbd;
+    }
+
+    .btn.alt{
+      background:transparent;
+      color:var(--accent);
+      border:2px solid rgba(0,102,204,0.12);
+    }
+
+    .hero-right{
+      flex:0 1 360px;
+      min-width:260px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:12px;
+      padding:18px;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.05);
+    }
+    .emergency{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .phone{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .phone a{
+      font-weight:700;
+      color:var(--danger);
+      text-decoration:none;
+    }
+    .small{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* sections */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:18px;
+      margin-top:24px;
+    }
+    @media (max-width:900px){ .grid{grid-template-columns:repeat(1,1fr);} }
+
+    .info{
+      padding:18px;
+      border-radius:12px;
+      background:linear-gradient(180deg,#ffffff,#fbfdff);
+      box-shadow: 0 6px 20px rgba(16,24,40,0.03);
+    }
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:8px;
+    }
+    .list .item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .bullet{
+      min-width:36px;
+      height:36px;
+      border-radius:8px;
+      background:var(--glass);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:var(--accent);
+    }
+
+    /* resources and footer */
+    footer{
+      margin-top:32px;
+      padding:28px 18px;
+      color:var(--muted);
+      border-top:1px solid rgba(15,23,42,0.04);
+    }
+    .footer-grid{
+      max-width:var(--maxw);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1fr 220px;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width:900px){ .footer-grid{grid-template-columns:1fr;} }
+
+    .resources{
+      display:flex;
+      gap:12px;
+      flex-direction:column;
+    }
+    .resource-list a{
+      color:var(--accent);
+      font-weight:600;
+      text-decoration:none;
+      display:block;
+      margin:6px 0;
+    }
+
+    .footer-bottom{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    /* Chat modal */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,0.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:80;
+    }
+    .modal{
+      width:100%;
+      max-width:720px;
+      background:white;
+      border-radius:14px;
+      padding:16px;
+      box-shadow: 0 24px 60px rgba(2,6,23,0.4);
+    }
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .close-btn{
+      background:transparent;
+      border:none;
+      font-size:18px;
+      cursor:pointer;
+      color:var(--muted);
+    }
+    .chat-window{
+      height:360px;
+      border-radius:10px;
+      border:1px solid rgba(15,23,42,0.06);
+      padding:12px;
+      overflow:auto;
+      background:linear-gradient(180deg,#fbfdff,#ffffff);
+    }
+    .chat-controls{
+      display:flex;
+      gap:8px;
+      margin-top:10px;
+    }
+    .input{
+      flex:1;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid rgba(15,23,42,0.06);
+    }
+
+    /* small utility */
+    .muted{color:var(--muted)}
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(6,95,197,0.06);
+      color:var(--accent);
+      font-weight:700;
+      font-size:13px;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav" role="navigation" aria-label="Principal">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">EN</div>
+        <div>
+          <div style="font-weight:800;">EntreNos</div>
+          <div class="small">Apoyo en Trastornos Alimenticios</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;">
+        <nav aria-label="Secciones">
+          <a href="#info">Información</a>
+          <a href="#profesionales">Profesionales</a>
+          <a href="#recursos">Recursos</a>
+        </nav>
+        <a href="#chat" class="cta" id="openChatBtn" style="margin-left:18px">Chat IA</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-left">
+        <div class="eyebrow">¿Qué son los Trastornos Alimenticios?</div>
+        <h1 id="hero-title">Información esencial sobre estas condiciones de salud mental</h1>
+        <p class="lead">Los trastornos de la conducta alimentaria (TCA) son afecciones graves de salud mental que afectan tanto la salud física como emocional. Se caracterizan por alteraciones persistentes en los patrones de alimentación que resultan en un deterioro significativo de la salud física o del funcionamiento psicosocial.</p>
+
+        <div class="buttons">
+          <a class="btn" href="#info">Explorar Información</a>
+          <a class="btn alt" href="#recursos">Recursos</a>
+        </div>
+
+        <div style="margin-top:18px" class="muted">
+          <strong>EntreNos</strong><br>
+          Esta página ofrece información educativa sobre trastornos alimenticios. No sustituye el diagnóstico o tratamiento profesional.
+        </div>
+      </div>
+
+      <aside class="hero-right">
+        <div class="card" role="complementary" aria-label="Ayuda inmediata">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-weight:700">¿Necesitas ayuda inmediata?</div>
+              <div class="small">Si tú o alguien que conoces está en crisis, contacta la Línea Nacional (disponible 24/7).</div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px" class="emergency">
+            <div class="phone">
+              <div class="small">Teléfono de emergencia</div>
+              <a href="tel:900202010" aria-label="Llamar al 900202010">900 20 20 10</a>
+              <a href="tel:112" aria-label="Llamar al 112" class="small">112</a>
+            </div>
+            <div style="margin-left:auto;text-align:right">
+              <div class="small">Apoyo profesional</div>
+              <div class="chip">Trabajar con especialistas</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="small">Emergencias: Si estás en crisis, contacta inmediatamente. Disponible 24/7.</div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Main info grid -->
+    <section id="info" style="margin-top:18px;">
+      <div class="grid">
+        <div class="info card" aria-labelledby="que">
+          <h3 id="que">¿Qué son los Trastornos Alimenticios?</h3>
+          <p class="muted">Los trastornos de la conducta alimentaria (TCA) son afecciones serias de salud mental que pueden afectar cualquier edad o género. Pueden incluir anorexia nerviosa, bulimia nerviosa, trastorno por atracón, y otras condiciones.</p>
+
+          <div class="list" style="margin-top:12px;">
+            <div class="item">
+              <div class="bullet">✓</div>
+              <div>
+                <div style="font-weight:700">Afectan a millones</div>
+                <div class="small">Millones de personas de todas las edades y géneros.</div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="bullet">⚕</div>
+              <div>
+                <div style="font-weight:700">Condición médica seria</div>
+                <div class="small">No son elecciones de estilo de vida.</div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="bullet">⭐</div>
+              <div>
+                <div style="font-weight:700">Recuperación posible</div>
+                <div class="small">La recuperación completa es posible con tratamiento adecuado.</div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="bullet">⏱</div>
+              <div>
+                <div style="font-weight:700">Intervención temprana</div>
+                <div class="small">Mejora significativamente los resultados.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info card" aria-labelledby="apoyo">
+          <h3 id="apoyo">Apoyo Profesional</h3>
+          <p class="muted">Trabajar con profesionales especializados es fundamental para la recuperación.</p>
+          <ul style="margin-top:10px;color:var(--muted)">
+            <li>Médicos y psiquiatras</li>
+            <li>Psicólogos especializados en TCA</li>
+            <li>Nutricionistas clínicos</li>
+            <li>Grupos de apoyo</li>
+          </ul>
+        </div>
+
+        <div class="info card" aria-labelledby="comunidad">
+          <h3 id="comunidad">Comunidad</h3>
+          <p class="muted">El apoyo de grupos y comunidades puede ser un complemento valioso al tratamiento.</p>
+          <p class="small" style="margin-top:8px">Buscar espacios seguros, compartir experiencias y recibir acompañamiento reduce el aislamiento.</p>
+        </div>
+      </div>
+
+      <!-- Second row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;">
+        <div class="card info" aria-labelledby="educ">
+          <h3 id="educ">Educación</h3>
+          <p class="muted">Entender estos trastornos ayuda a reducir el estigma y promover la empatía.</p>
+          <p class="small" style="margin-top:8px">Materiales educativos, talleres y formación para profesionales y comunidades.</p>
+        </div>
+
+        <div class="card info" aria-labelledby="emerg">
+          <h3 id="emerg">Emergencias</h3>
+          <p class="muted">Si estás en crisis, contacta inmediatamente:</p>
+          <div style="margin-top:10px;display:flex;gap:10px;flex-direction:column;">
+            <a class="btn" href="tel:01 2927879 ">📞 106 </a>
+            <a class="btn alt" href="tel:900202010">📞 919293465 </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recursos -->
+    <section id="recursos" style="margin-top:22px;">
+      <div class="card info" style="padding:18px;">
+        <h3>Recursos</h3>
+        <p class="muted">Algunas fuentes y organizaciones que pueden ayudar:</p>
+        <div class="resource-list" style="margin-top:12px;">
+          <a href="#" onclick="return false">Ministerio de Salud</a>
+          <a href="#" onclick="return false">Salud Mental Perú</a>
+          <a href="#" onclick="return false">Bomberos </a>
+          <a href="#" onclick="return false">Psicologos</a>
+        </div>
+
+        <p class="small" style="margin-top:12px">Esta página ofrece asesoría profesional.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-grid">
+        <div>
+          <div style="font-weight:800;font-size:18px">EntreNos</div>
+          <div class="small" style="margin-top:6px">Juntos en el camino — Hecho para ayudarte</div>
+
+          <div style="margin-top:12px" class="muted">
+            © 2025 EntreNos - Apoyo en Trastornos Alimenticios. Información con fines educativos.
+          </div>
+        </div>
+
+        <div>
+          <div style="font-weight:700">Contacto</div>
+          <div class="small" style="margin-top:6px">
+            <div>Tel: <a href="tel:112">112</a></div>
+            <div>Tel: <a href="tel:900202010">900 20 20 10</a></div>
+            <div style="margin-top:8px">Hacer remix con Figma Make</div>
+            <div class="small" style="margin-top:6px">
+              <a href="https://www.figma.com/community/make" target="_blank" rel="noopener">Figma Make</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom" style="max-width:var(--maxw);margin:12px auto 0;">
+        <div class="small">Hecho con ❤️ para ayudarte</div>
+        <div class="small">Diseño e información: EntreNos</div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Chat modal (simulado) -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
+      <div class="modal-header">
+        <div>
+          <div id="chatTitle" style="font-weight:800">Chat de Ayuda IA</div>
+          <div class="small">Espacio seguro y confidencial</div>
+        </div>
+        <button class="close-btn" id="closeModal" aria-label="Cerrar chat">✕</button>
+      </div>
+
+      <div class="chat-window" id="chatWindow" aria-live="polite">
+        <div class="small muted">Chat iniciado. Este es un simulador de ayuda. En caso de crisis, llama a los números de emergencia.</div>
+      </div>
+
+      <div class="chat-controls" style="margin-top:12px;">
+        <input class="input" id="chatInput" placeholder="Escribe tu mensaje..." aria-label="Escribe tu mensaje"/>
+        <button class="btn" id="sendBtn">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function(){
+  // =============================
+  // MÓDULO 1: Modal del chat
+  // =============================
+  const openBtn = document.getElementById('openChatBtn');
+  const backdrop = document.getElementById('modalBackdrop');
+  const closeBtn = document.getElementById('closeModal');
+  const chatWindow = document.getElementById('chatWindow');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  function openModal(e){
+    e && e.preventDefault();
+    backdrop.style.display = 'flex';
+    backdrop.setAttribute('aria-hidden','false');
+    chatInput.focus();
+    // iniciar el nuevo flujo del chat si no ha empezado
+    if(!chatIniciado) iniciarChat();
+  }
+  function closeModal(){
+    backdrop.style.display = 'none';
+    backdrop.setAttribute('aria-hidden','true');
+    openBtn.focus();
+  }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', function(e){
+    if(e.target === backdrop) closeModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && backdrop.style.display === 'flex'){ closeModal(); }
+  });
+
+  // =============================
+  // MÓDULO 2: Chat interactivo guiado (nuevo)
+  // =============================
+
+  // Base de preguntas guiadas
+  const preguntas = [
+    { text: "Hola, quiero conocerte mejor para ayudarte. Del 1 al 10, ¿cómo te sientes hoy (1 muy mal – 10 excelente)?", etapa: "estado" },
+    { text: "¿Cuánto calificarías tu ansiedad (1–10)?", etapa: "ansiedad" },
+    { text: "Con cuál de estos problemas te identificas: Bulimia, Anorexia, Atracones o Evitación de ingesta?", etapa: "tca" },
+    { text: "¿Qué comes durante el día?", etapa: "alimentacion" },
+    { text: "¿Hay alimentos que te preocupan? ¿Por qué?", etapa: "alimentacion" },
+    { text: "¿Consideras que controlas excesivamente lo que comes?", etapa: "alimentacion" },
+    { text: "¿Has vomitado, usado laxantes, diuréticos u otros productos para ‘controlar’ tu peso?", etapa: "alimentacion" },
+    { text: "¿Cómo valorarías tu imagen física en este momento, positiva o negativa? ¿Por qué?", etapa: "autoestima" },
+    { text: "¿Cuánto tiempo del día dedicas a pensar en tu peso y en la comida?", etapa: "autoestima" },
+    { text: "¿Te pesas con más frecuencia?", etapa: "autoestima" },
+    { text: "¿Te miras al espejo con más frecuencia? ¿Cuánto?", etapa: "autoestima" },
+    { text: "¿Evitas pesarte o mirarte al espejo?", etapa: "autoestima" },
+    { text: "¿Has notado debilidad en tus músculos (ej. cansancio al subir escaleras, peinarte, cepillarte los dientes)?", etapa: "sintomas" },
+    { text: "¿Cómo duermes? ¿Cuántas horas al día?", etapa: "sintomas" },
+    { text: "¿Tienes mareos o sensación de desvanecimiento? ¿Con qué frecuencia?", etapa: "sintomas" },
+    { text: "Te recomiendo algunas técnicas para prevenir una crisis ansiosa: respiración profunda, escritura emocional, pausas de descanso, hablar con alguien de confianza.", etapa: "recomendacion" },
+    { text: "Además, intenta mantener horarios regulares de comida, no saltar desayunos, e incluir alimentos variados.", etapa: "recomendacion" },
+    { text: "Recuerda: tu valor no depende de tu peso ni de tu apariencia. Puedes contar conmigo siempre que lo necesites 💙", etapa: "final" }
+  ];
+
+  const definicionesTCA = {
+    "bulimia": "Bulimia nerviosa: episodios de ingesta excesiva de alimentos seguidos de conductas compensatorias como vómito, laxantes o ejercicio excesivo.",
+    "anorexia": "Anorexia nerviosa: restricción severa de la ingesta de alimentos con miedo intenso a subir de peso y distorsión de la imagen corporal.",
+    "atracones": "Trastorno por atracón: consumo recurrente de grandes cantidades de comida en poco tiempo, acompañado de sensación de pérdida de control.",
+    "evitación": "Trastorno de evitación/restricción de la ingesta (ARFID): evitación persistente de alimentos, no motivada por la imagen corporal sino por rechazo sensorial o miedo a consecuencias negativas."
+  };
+
+  let indice = 0;
+  let chatIniciado = false;
+
+  function addMessage(text, sender){
+    const div = document.createElement('div');
+    div.style.margin = '10px 0';
+    div.style.padding = '8px 10px';
+    div.style.borderRadius = '8px';
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.lineHeight = '1.4';
+    if(sender === 'user'){
+      div.style.alignSelf = 'flex-end';
+      div.style.background = 'linear-gradient(90deg,#e6f0ff,#fff)';
+      div.style.border = '1px solid rgba(6,95,197,0.08)';
+      div.textContent = "Tú: " + text;
+    } else {
+      div.style.background = '#f7fafc';
+      div.style.border = '1px solid rgba(15,23,42,0.04)';
+      div.textContent = "Bot: " + text;
+    }
+    chatWindow.appendChild(div);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  function nextPregunta(){
+    if(indice < preguntas.length){
+      const p = preguntas[indice];
+      setTimeout(()=>addMessage(p.text, 'bot'), 600);
+    }
+  }
+
+  function iniciarChat(){
+    chatIniciado = true;
+    indice = 0;
+    chatWindow.innerHTML = '<div class="small muted">Chat iniciado. Este es un simulador de ayuda. En caso de crisis, llama a los números de emergencia.</div>';
+    nextPregunta();
+  }
+
+  // Evento del botón de enviar
+  sendBtn.addEventListener('click', ()=>{
+    const respuesta = chatInput.value.trim();
+    if(respuesta === "") return;
+    addMessage(respuesta, 'user');
+
+    const etapaActual = preguntas[indice]?.etapa;
+    if(etapaActual === "tca"){
+      const clave = respuesta.toLowerCase();
+      for(let k in definicionesTCA){
+        if(clave.includes(k)){
+          addMessage(definicionesTCA[k], "bot");
+        }
+      }
+    }
+
+    indice++;
+    chatInput.value = "";
+    nextPregunta();
+  });
+
+  chatInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); sendBtn.click(); }
+  });
+
+  // =============================
+  // MÓDULO 3: Desplazamiento suave
+  // =============================
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', function(e){
+      const targetId = this.getAttribute('href').slice(1);
+      const el = document.getElementById(targetId);
+      if(el){
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    });
+  });
+})();
+</script>
+  </script>
+</body>
+</html>
