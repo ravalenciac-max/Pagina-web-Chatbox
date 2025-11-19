@@ -533,7 +533,7 @@
     </div>
   </div>
 
-  <script>
+<script>
 (function(){
   // =============================
   // MÓDULO 1: Modal del chat
@@ -550,7 +550,6 @@
     backdrop.style.display = 'flex';
     backdrop.setAttribute('aria-hidden','false');
     chatInput.focus();
-    // iniciar el nuevo flujo del chat si no ha empezado
     if(!chatIniciado) iniciarChat();
   }
   function closeModal(){
@@ -569,10 +568,9 @@
   });
 
   // =============================
-  // MÓDULO 2: Chat interactivo guiado (nuevo)
+  // MÓDULO 2: Chat interactivo guiado + MEMORIA + DETECCIÓN DE RIESGO
   // =============================
 
-  // Base de preguntas guiadas
   const preguntas = [
     { text: "Hola, quiero conocerte mejor para ayudarte. Del 1 al 10, ¿cómo te sientes hoy (1 muy mal – 10 excelente)?", etapa: "estado" },
     { text: "¿Cuánto calificarías tu ansiedad (1–10)?", etapa: "ansiedad" },
@@ -586,7 +584,7 @@
     { text: "¿Te pesas con más frecuencia?", etapa: "autoestima" },
     { text: "¿Te miras al espejo con más frecuencia? ¿Cuánto?", etapa: "autoestima" },
     { text: "¿Evitas pesarte o mirarte al espejo?", etapa: "autoestima" },
-    { text: "¿Has notado debilidad en tus músculos (ej. cansancio al subir escaleras, peinarte, cepillarte los dientes)?", etapa: "sintomas" },
+    { text: "¿Has notado debilidad en tus músculos?", etapa: "sintomas" },
     { text: "¿Cómo duermes? ¿Cuántas horas al día?", etapa: "sintomas" },
     { text: "¿Tienes mareos o sensación de desvanecimiento? ¿Con qué frecuencia?", etapa: "sintomas" },
     { text: "Te recomiendo algunas técnicas para prevenir una crisis ansiosa: respiración profunda, escritura emocional, pausas de descanso, hablar con alguien de confianza.", etapa: "recomendacion" },
@@ -595,15 +593,48 @@
   ];
 
   const definicionesTCA = {
-    "bulimia": "Bulimia nerviosa: episodios de ingesta excesiva de alimentos seguidos de conductas compensatorias como vómito, laxantes o ejercicio excesivo.",
-    "anorexia": "Anorexia nerviosa: restricción severa de la ingesta de alimentos con miedo intenso a subir de peso y distorsión de la imagen corporal.",
-    "atracones": "Trastorno por atracón: consumo recurrente de grandes cantidades de comida en poco tiempo, acompañado de sensación de pérdida de control.",
-    "evitación": "Trastorno de evitación/restricción de la ingesta (ARFID): evitación persistente de alimentos, no motivada por la imagen corporal sino por rechazo sensorial o miedo a consecuencias negativas."
+    "bulimia": "Bulimia nerviosa: episodios de ingesta excesiva seguidos de conductas compensatorias como vómito, laxantes o ejercicio excesivo.",
+    "anorexia": "Anorexia nerviosa: restricción severa de la ingesta con intenso miedo a subir de peso.",
+    "atracones": "Trastorno por atracón: comer grandes cantidades en poco tiempo con sensación de pérdida de control.",
+    "evitación": "ARFID: evitación persistente de alimentos no motivada por imagen corporal sino por rechazo sensorial o miedo a consecuencias."
   };
 
   let indice = 0;
   let chatIniciado = false;
 
+  // ====== Memoria del chat ======
+  let memoriaChat = {
+    estado_animo: null,
+    ansiedad: null,
+    tipo_tca: null,
+    alimentacion: [],
+    autoestima: [],
+    sintomas: []
+  };
+
+  // ====== Palabras sensibles ======
+  const palabrasRiesgo = [
+    "muerte", "morir", "quiero morir", "suicid", "suicidarme", "matarme",
+    "lastimarme", "autolesion", "autolesión", "no quiero vivir",
+    "quitarme la vida", "desaparecer", "hacerme daño", "cansado de vivir"
+  ];
+
+  function contieneRiesgo(texto){
+    const t = texto.toLowerCase();
+    return palabrasRiesgo.some(p => t.includes(p));
+  }
+
+  function mensajeApoyo(){
+    addMessage(
+      "💙 Lamento que estés pasando por un momento tan difícil. No estás solo/a.\n\n" +
+      "Si estás pensando en hacerte daño, es muy importante buscar apoyo inmediato.\n" +
+      "En Perú puedes llamar a la Línea 113 opción 5 (salud mental). También hablar con alguien de confianza puede ayudarte.\n\n" +
+      "Estoy aquí para acompañarte, gracias por confiar en mí.",
+      "bot"
+    );
+  }
+
+  // ====== Funciones del chat ======
   function addMessage(text, sender){
     const div = document.createElement('div');
     div.style.margin = '10px 0';
@@ -611,6 +642,7 @@
     div.style.borderRadius = '8px';
     div.style.whiteSpace = 'pre-wrap';
     div.style.lineHeight = '1.4';
+
     if(sender === 'user'){
       div.style.alignSelf = 'flex-end';
       div.style.background = 'linear-gradient(90deg,#e6f0ff,#fff)';
@@ -635,17 +667,63 @@
   function iniciarChat(){
     chatIniciado = true;
     indice = 0;
-    chatWindow.innerHTML = '<div class="small muted">Chat iniciado. Este es un simulador de ayuda. En caso de crisis, llama a los números de emergencia.</div>';
+    chatWindow.innerHTML =
+      '<div class="small muted">Chat iniciado. Este es un simulador de ayuda emocional. En caso de crisis, llama a emergencias.</div>';
     nextPregunta();
   }
 
-  // Evento del botón de enviar
+  // ====== Interactividad según memoria ======
+  function interaccionMemoria(etapa, respuesta){
+    const r = respuesta.toLowerCase();
+
+    if(etapa === "estado"){
+      let n = parseInt(respuesta);
+      if(n <= 3){
+        addMessage("Siento que estés pasando por un día difícil. Gracias por compartirlo, estoy contigo 💙", "bot");
+      } else if(n <= 6){
+        addMessage("Gracias por contarlo. Vamos paso a paso, estoy aquí para ti.", "bot");
+      } else {
+        addMessage("Me alegra que te sientas relativamente bien. Sigamos conversando 😊", "bot");
+      }
+    }
+
+    if(etapa === "ansiedad"){
+      let n = parseInt(respuesta);
+      if(n >= 7){
+        addMessage("Debe ser agotador sentir tanta ansiedad. Vamos a tratar de bajarla juntos 🙏", "bot");
+      }
+    }
+
+    if(etapa === "alimentacion"){
+      if(r.includes("nada") || r.includes("poco")){
+        addMessage("Comer muy poco puede afectar mucho tu energía. Gracias por contarlo, avancemos con calma 💙", "bot");
+      }
+    }
+  }
+
+  // ====== Envío de mensajes ======
   sendBtn.addEventListener('click', ()=>{
     const respuesta = chatInput.value.trim();
     if(respuesta === "") return;
+
     addMessage(respuesta, 'user');
 
+    // 1. DETECCIÓN DE RIESGO
+    if(contieneRiesgo(respuesta)){
+      mensajeApoyo();
+    }
+
+    // 2. GUARDAR MEMORIA
     const etapaActual = preguntas[indice]?.etapa;
+
+    if(etapaActual === "estado") memoriaChat.estado_animo = respuesta;
+    if(etapaActual === "ansiedad") memoriaChat.ansiedad = respuesta;
+    if(etapaActual === "tca") memoriaChat.tipo_tca = respuesta;
+    if(etapaActual === "alimentacion") memoriaChat.alimentacion.push(respuesta);
+    if(etapaActual === "autoestima") memoriaChat.autoestima.push(respuesta);
+    if(etapaActual === "sintomas") memoriaChat.sintomas.push(respuesta);
+
+    // 3. Definiciones TCA
     if(etapaActual === "tca"){
       const clave = respuesta.toLowerCase();
       for(let k in definicionesTCA){
@@ -655,9 +733,13 @@
       }
     }
 
+    // 4. Avanzar
     indice++;
     chatInput.value = "";
     nextPregunta();
+
+    // 5. Más interactividad
+    interaccionMemoria(etapaActual, respuesta);
   });
 
   chatInput.addEventListener('keydown', function(e){
@@ -665,7 +747,7 @@
   });
 
   // =============================
-  // MÓDULO 3: Desplazamiento suave
+  // MÓDULO 3: Scroll suave
   // =============================
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener('click', function(e){
@@ -677,8 +759,10 @@
       }
     });
   });
+
 })();
 </script>
   </script>
 </body>
 </html>
+
